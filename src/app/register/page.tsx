@@ -4,6 +4,10 @@ import { BaseInput, Logo } from "@/components";
 import React, { useState } from "react";
 import Wrapper from "../../assets/wrappers/RegisterPage";
 import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import useSlice, { loginUser, registerUser } from "@/features/useSlice";
+import { RootState } from "@reduxjs/toolkit/query";
+import customFetch from "@/utils/axios";
 
 interface initialStateProps {
   name: string;
@@ -21,7 +25,8 @@ const initialState: initialStateProps = {
 
 const Register = () => {
   const [values, setValues] = useState<initialStateProps>(initialState);
-  console.log("🚀 ~ Register ~ values:", values);
+  const dispatch = useDispatch();
+  const { user, isLoading } = useSelector((state: RootState) => state.user);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name } = e.target;
@@ -37,6 +42,13 @@ const Register = () => {
       toast.error("Please fill out all fields");
       return;
     }
+
+    if (isMember) {
+      dispatch(loginUser({ email, password }));
+      return;
+    }
+
+    dispatch(registerUser({ name, email, password }));
   };
 
   const handleToggleMember = () =>

@@ -5,9 +5,7 @@ import React, { useState } from "react";
 import Wrapper from "../../assets/wrappers/RegisterPage";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import useSlice, { loginUser, registerUser } from "@/features/useSlice";
-import { RootState } from "@reduxjs/toolkit/query";
-import customFetch from "@/utils/axios";
+import { loginUser, registerUser } from "@/features/useSlice";
 
 interface initialStateProps {
   name: string;
@@ -26,7 +24,7 @@ const initialState: initialStateProps = {
 const Register = () => {
   const [values, setValues] = useState<initialStateProps>(initialState);
   const dispatch = useDispatch();
-  const { user, isLoading } = useSelector((state: RootState) => state.user);
+  const { user, isLoading } = useSelector((state: any) => state.user);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name } = e.target;
@@ -52,9 +50,7 @@ const Register = () => {
   };
 
   const handleToggleMember = () =>
-    setValues((prev) => {
-      return { ...prev, isMember: !prev.isMember };
-    });
+    setValues({ ...values, isMember: !values.isMember });
 
   return (
     <Wrapper className="full-page">
@@ -85,16 +81,20 @@ const Register = () => {
           onChange={handleChange}
         />
 
-        <button type="submit" className="btn btn-block">
-          submit
+        <button type="submit" className="btn btn-block" disabled={isLoading}>
+          {isLoading ? "loading..." : "submit"}
         </button>
 
-        <div>
+        <p>
           {values.isMember ? "Not a member yet?" : "Already a member?"}
-          <button className="member-btn" onClick={handleToggleMember}>
+          <button
+            type="button"
+            className="member-btn"
+            onClick={handleToggleMember}
+          >
             {values.isMember ? "Register" : "Login"}
           </button>
-        </div>
+        </p>
       </form>
     </Wrapper>
   );

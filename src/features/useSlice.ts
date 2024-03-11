@@ -1,11 +1,20 @@
 import customFetch from "@/utils/axios";
-import { addToLocalStorage, getFromLocalStorage } from "@/utils/localStorage";
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import {
+  User_TP,
+  addToLocalStorage,
+  getFromLocalStorage,
+} from "@/utils/localStorage";
+import {
+  createSlice,
+  createAsyncThunk,
+  AsyncThunk,
+  UnknownAction,
+} from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
 interface InitialState {
   isLoading: boolean;
-  user: null | object;
+  user: null | User_TP;
 }
 
 const initialState: InitialState = {
@@ -14,43 +23,35 @@ const initialState: InitialState = {
 };
 
 export const registerUser = createAsyncThunk(
-  "user/register",
+  "user/registerUser",
   async (user: string, thunkAPI) => {
     try {
       const response = await customFetch.post("/auth/register", user);
       return response.data;
-    } catch (error) {
-      toast.error(
-        error instanceof Error
-          ? error?.response?.data?.msg
-          : "An error occurred"
-      );
-      return thunkAPI.rejectWithValue(
-        error instanceof Error
-          ? error?.response?.data?.msg
-          : "An error occurred"
-      );
+    } catch (error: any) {
+      const errorMsg =
+        error.response && error.response.data.msg
+          ? error.response.data.msg
+          : "An error occurred";
+      toast.error(errorMsg);
+      return thunkAPI.rejectWithValue(errorMsg);
     }
   }
 );
 
 export const loginUser = createAsyncThunk(
-  "user/login",
+  "user/loginUser",
   async (user: string, thunkAPI) => {
     try {
       const response = await customFetch.post("/auth/login", user);
       return response.data;
-    } catch (error) {
-      toast.error(
-        error instanceof Error
-          ? error?.response?.data?.msg
-          : "An error occurred"
-      );
-      return thunkAPI.rejectWithValue(
-        error instanceof Error
-          ? error?.response?.data?.msg
-          : "An error occurred"
-      );
+    } catch (error: any) {
+      const errorMsg =
+        error.response && error.response.data.msg
+          ? error.response.data.msg
+          : "An error occurred";
+      toast.error(errorMsg);
+      return thunkAPI.rejectWithValue(errorMsg);
     }
   }
 );
@@ -58,6 +59,7 @@ export const loginUser = createAsyncThunk(
 export const useSlice = createSlice({
   name: "userSlice",
   initialState,
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(registerUser.pending, (state) => {
@@ -72,16 +74,13 @@ export const useSlice = createSlice({
       })
       .addCase(registerUser.rejected, (state, { payload }) => {
         state.isLoading = false;
-        toast.error(payload);
-      });
-
-    builder
+        toast.error(payload as string);
+      })
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(loginUser.fulfilled, (state, { payload }) => {
         const { user } = payload;
-        console.log("🚀 ~ .addCase ~ user:", JSON.stringify(user));
         state.isLoading = false;
         state.user = user;
         addToLocalStorage(user);
@@ -89,7 +88,7 @@ export const useSlice = createSlice({
       })
       .addCase(loginUser.rejected, (state, { payload }) => {
         state.isLoading = false;
-        toast.error(payload);
+        toast.error(payload as string);
       });
   },
 });

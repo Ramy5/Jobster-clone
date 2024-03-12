@@ -1,11 +1,12 @@
 "use client";
 
 import { BaseInput, Logo } from "@/components";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Wrapper from "../../assets/wrappers/RegisterPage";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser, registerUser } from "@/features/useSlice";
+import { useRouter } from "next/navigation";
 
 interface initialStateProps {
   name: string;
@@ -25,6 +26,8 @@ const Register = () => {
   const [values, setValues] = useState<initialStateProps>(initialState);
   const dispatch = useDispatch();
   const { user, isLoading } = useSelector((state: any) => state.user);
+  console.log("🚀 ~ Register ~ user:", user);
+  const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name } = e.target;
@@ -51,6 +54,12 @@ const Register = () => {
 
   const handleToggleMember = () =>
     setValues({ ...values, isMember: !values.isMember });
+
+  useEffect(() => {
+    if (user) {
+      setTimeout(() => router.push("/"), 1000);
+    }
+  }, [user]);
 
   return (
     <Wrapper className="full-page">

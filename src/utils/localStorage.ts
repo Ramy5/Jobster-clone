@@ -1,15 +1,18 @@
-"use client";
+export interface User_TP {
+  email: string;
+  lastName: string;
+  location: string;
+  name: string;
+  token: string;
+}
 
-export const addToLocalStorage = (user) => {
-  window.localStorage.setItem("user", JSON.stringify(user));
-};
+export const addToLocalStorage = (user: User_TP) =>
+  localStorage.setItem("user", JSON.stringify(user));
 
 export const getFromLocalStorage = () => {
-  const user = window.localStorage.getItem("user");
+  const user = localStorage.getItem("user");
   const userResult = user ? JSON.parse(user) : null;
   return userResult;
 };
 
-export const clearFromLocalStorage = () => {
-  window.localStorage.removeItem("user");
-};
+export const clearFromLocalStorage = () => localStorage.removeItem("user");

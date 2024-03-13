@@ -4,8 +4,7 @@ import "./normalize.css";
 import "./globals.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import GlobalLayout from "@/components/GlobalLayout";
-import SharedLayout from "@/components/sharedLayout/SharedLayout";
+import { GlobalLayout, SharedLayout } from "@/components";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -41,7 +40,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <GlobalLayout>
-          <SharedLayout>{children}</SharedLayout>
+          {children}
           <ToastContainer position="top-center" />
         </GlobalLayout>
       </body>

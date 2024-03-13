@@ -56,9 +56,7 @@ const Register = () => {
     setValues({ ...values, isMember: !values.isMember });
 
   useEffect(() => {
-    if (user) {
-      setTimeout(() => router.push("/"), 1000);
-    }
+    if (user) setTimeout(() => router.push("/"), 1000);
   }, [user]);
 
   return (
@@ -86,6 +84,7 @@ const Register = () => {
         <BaseInput
           labelText="password"
           name="password"
+          type="password"
           value={values.password}
           onChange={handleChange}
         />

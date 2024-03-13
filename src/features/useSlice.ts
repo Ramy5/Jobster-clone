@@ -4,12 +4,7 @@ import {
   addToLocalStorage,
   getFromLocalStorage,
 } from "@/utils/localStorage";
-import {
-  createSlice,
-  createAsyncThunk,
-  AsyncThunk,
-  UnknownAction,
-} from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
 interface InitialState {

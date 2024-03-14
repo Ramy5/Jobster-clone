@@ -40,8 +40,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <GlobalLayout>
-          {children}
-          <ToastContainer position="top-center" />
+          <SharedLayout>
+            {children}
+            <ToastContainer position="top-center" />
+          </SharedLayout>
         </GlobalLayout>
       </body>
     </html>

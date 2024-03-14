@@ -13,6 +13,19 @@ const Wrapper = styled.section`
     border-top: 5px solid var(--primary-500);
   }
 
+  .password-container {
+    position: relative;
+  }
+
+  .password-hide,
+  .password-show {
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    cursor: pointer;
+    color: #3b82f6;
+  }
+
   h3 {
     text-align: center;
   }

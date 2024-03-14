@@ -1,10 +1,23 @@
 import React from "react";
 import "./loading.css";
-import Image from "next/image";
-import LoadingImg from "../assets/images/loading.svg";
 
 const loading = () => {
-  return <Image src={LoadingImg} alt="loading" width={300} height={300} />;
+  return (
+    <div className="spinner-container">
+      <div className="spinner">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  );
 };
 
 export default loading;

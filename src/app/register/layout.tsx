@@ -4,17 +4,16 @@ import "../normalize.css";
 import "../globals.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import GlobalLayout from "@/components/GlobalLayout";
-import { SharedLayout } from "@/components";
+import { GlobalLayout, SharedLayout } from "@/components";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Profile",
-  description: "Show Profile",
+  title: "Jobster",
+  description: "Post a job or view any job",
   icons: {
-    icon: "../favicon.ico",
-    shortcut: "../favicon.ico",
+    icon: "favicon.ico",
+    shortcut: "favicon.ico",
   },
 };
 
@@ -24,9 +23,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <GlobalLayout>
-      <SharedLayout>{children}</SharedLayout>
-      <ToastContainer position="top-center" />
-    </GlobalLayout>
+    <html lang="en">
+      <body className={inter.className}>
+        <GlobalLayout>
+          {children}
+          <ToastContainer position="top-center" />
+        </GlobalLayout>
+      </body>
+    </html>
   );
 }

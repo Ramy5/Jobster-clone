@@ -7,6 +7,8 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser, registerUser } from "@/features/useSlice";
 import { useRouter } from "next/navigation";
+import { IoMdEyeOff } from "react-icons/io";
+import { IoEye } from "react-icons/io5";
 
 interface initialStateProps {
   name: string;
@@ -24,9 +26,9 @@ const initialState: initialStateProps = {
 
 const Register = () => {
   const [values, setValues] = useState<initialStateProps>(initialState);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const dispatch = useDispatch();
   const { user, isLoading } = useSelector((state: any) => state.user);
-  console.log("🚀 ~ Register ~ user:", user);
   const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,6 +36,8 @@ const Register = () => {
     const { value } = e.target;
     setValues((prev) => ({ ...prev, [name]: value }));
   };
+
+  const handleShowPassword = () => setShowPassword((prev) => !prev);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -56,7 +60,7 @@ const Register = () => {
     setValues({ ...values, isMember: !values.isMember });
 
   useEffect(() => {
-    if (user) setTimeout(() => router.push("/"), 1000);
+    if (user) setTimeout(() => router.push("/stats"), 1000);
   }, [user]);
 
   return (
@@ -81,13 +85,23 @@ const Register = () => {
           onChange={handleChange}
         />
 
-        <BaseInput
-          labelText="password"
-          name="password"
-          type="password"
-          value={values.password}
-          onChange={handleChange}
-        />
+        <div className="password-container">
+          <BaseInput
+            labelText="password"
+            name="password"
+            type={showPassword ? "text" : "password"}
+            value={values.password}
+            onChange={handleChange}
+          />
+          {showPassword ? (
+            <IoMdEyeOff
+              className="password-hide"
+              onClick={handleShowPassword}
+            />
+          ) : (
+            <IoEye className="password-show" onClick={handleShowPassword} />
+          )}
+        </div>
 
         <button type="submit" className="btn btn-block" disabled={isLoading}>
           {isLoading ? "loading..." : "submit"}

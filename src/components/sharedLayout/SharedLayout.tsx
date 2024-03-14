@@ -5,6 +5,7 @@ import Wrapper from "@/assets/wrappers/SharedLayout";
 import SmallSideBar from "./SmallSideBar";
 import BigSideBar from "./BigSideBar";
 import NavBar from "./NavBar";
+import ProtectedRoute from "../ProtectedRoute";
 
 interface sharedLayout_TP {
   children?: ReactNode;
@@ -12,16 +13,18 @@ interface sharedLayout_TP {
 
 const SharedLayout: React.FC<sharedLayout_TP> = ({ children }) => {
   return (
-    <Wrapper>
-      <main className="dashboard">
-        <SmallSideBar />
-        <BigSideBar />
-        <div>
-          <NavBar />
-          <div className="dashboard-page">{children}</div>
-        </div>
-      </main>
-    </Wrapper>
+    <ProtectedRoute>
+      <Wrapper>
+        <main className="dashboard">
+          <SmallSideBar />
+          <BigSideBar />
+          <div>
+            <NavBar />
+            <div className="dashboard-page">{children}</div>
+          </div>
+        </main>
+      </Wrapper>
+    </ProtectedRoute>
   );
 };
 

@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from "styled-components";
 
 const Wrapper = styled.nav`
   height: var(--nav-height);
@@ -65,6 +65,7 @@ const Wrapper = styled.nav`
   .logo-text {
     display: none;
     margin: 0;
+    color: black;
   }
   @media (min-width: 992px) {
     position: sticky;
@@ -80,5 +81,5 @@ const Wrapper = styled.nav`
       display: block;
     }
   }
-`
-export default Wrapper
+`;
+export default Wrapper;

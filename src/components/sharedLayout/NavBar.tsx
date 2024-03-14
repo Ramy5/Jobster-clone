@@ -4,6 +4,7 @@ import { FaAlignLeft, FaCaretDown, FaUserCircle } from "react-icons/fa";
 import { Logo } from "..";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser, toggleSidebar } from "@/features/useSlice";
+import Link from "next/link";
 
 const NavBar = () => {
   const [showLogout, setShowLogout] = useState<boolean>(false);
@@ -21,10 +22,10 @@ const NavBar = () => {
           <FaAlignLeft />
         </button>
 
-        <div>
+        <Link href={"/"}>
           <Logo />
           <h3 className="logo-text">Dashboard</h3>
-        </div>
+        </Link>
 
         <div className="btn-container">
           <button

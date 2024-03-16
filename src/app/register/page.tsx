@@ -60,7 +60,7 @@ const Register = () => {
     setValues({ ...values, isMember: !values.isMember });
 
   useEffect(() => {
-    if (user) setTimeout(() => router.push("/stats"), 1000);
+    if (user) setTimeout(() => router.push("/dashboard"), 1000);
   }, [user]);
 
   return (

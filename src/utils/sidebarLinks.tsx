@@ -11,10 +11,15 @@ interface SidebarLinks_TP {
 }
 
 const sidebarLinks: SidebarLinks_TP[] = [
-  { id: 1, text: "stats", icon: <IoBarChartSharp />, path: "/stats" },
-  { id: 2, text: "all jobs", icon: <MdQueryStats />, path: "/all-jobs" },
-  { id: 3, text: "add job", icon: <FaWpforms />, path: "/add-job" },
-  { id: 4, text: "profile", icon: <ImProfile />, path: "/profile" },
+  { id: 1, text: "stats", icon: <IoBarChartSharp />, path: "/dashboard" },
+  {
+    id: 2,
+    text: "all jobs",
+    icon: <MdQueryStats />,
+    path: "/dashboard/all-jobs",
+  },
+  { id: 3, text: "add job", icon: <FaWpforms />, path: "/dashboard/add-job" },
+  { id: 4, text: "profile", icon: <ImProfile />, path: "/dashboard/profile" },
 ];
 
 export default sidebarLinks;

@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import Wrapper from "@/assets/wrappers/Navbar";
 import { FaAlignLeft, FaCaretDown, FaUserCircle } from "react-icons/fa";

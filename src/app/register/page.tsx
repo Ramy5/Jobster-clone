@@ -70,24 +70,13 @@ const Register = () => {
         <h3>{values.isMember ? "Login" : "Register"} </h3>
 
         {!values.isMember && (
-          <BaseInput
-            labelText="name"
-            name="name"
-            value={values.name}
-            onChange={handleChange}
-          />
+          <BaseInput name="name" value={values.name} onChange={handleChange} />
         )}
 
-        <BaseInput
-          labelText="email"
-          name="email"
-          value={values.email}
-          onChange={handleChange}
-        />
+        <BaseInput name="email" value={values.email} onChange={handleChange} />
 
         <div className="password-container">
           <BaseInput
-            labelText="password"
             name="password"
             type={showPassword ? "text" : "password"}
             value={values.password}

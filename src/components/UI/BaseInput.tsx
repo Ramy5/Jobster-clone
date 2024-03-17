@@ -3,7 +3,7 @@ import React from "react";
 interface BaseInputProps {
   name: string;
   value: string;
-  labelText: string;
+  labelText?: string;
   type?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
@@ -20,7 +20,7 @@ const BaseInput: React.FC<BaseInputProps> = ({
   return (
     <div className="form-row">
       <label className="form-label" htmlFor={name}>
-        {labelText}
+        {labelText || name}
       </label>
       <input
         type={type}

@@ -1,6 +1,6 @@
-import { toggleSidebar } from "@/features/useSlice";
 import sidebarLinks from "@/utils/sidebarLinks";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React from "react";
 
 interface NavLinks_TP {
@@ -8,6 +8,8 @@ interface NavLinks_TP {
 }
 
 const NavLinks: React.FC<NavLinks_TP> = ({ toggleSidebar }) => {
+  const pathName = usePathname();
+
   return (
     <div className="nav-links">
       {sidebarLinks.map((link) => {
@@ -16,7 +18,7 @@ const NavLinks: React.FC<NavLinks_TP> = ({ toggleSidebar }) => {
         return (
           <Link
             onClick={toggleSidebar}
-            className="nav-link"
+            className={`nav-link ${pathName === path ? "active" : ""} `}
             href={path}
             key={id}
           >

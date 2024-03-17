@@ -1,8 +1,8 @@
+"use client";
+
 import React from "react";
 import Wrapper from "@/assets/wrappers/BigSidebar";
 import { useDispatch, useSelector } from "react-redux";
-import { toggleSidebar } from "@/features/useSlice";
-import { FaTimes } from "react-icons/fa";
 import { Logo } from "..";
 import NavLinks from "../UI/NavLinks";
 import Link from "next/link";

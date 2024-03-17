@@ -22,7 +22,7 @@ const initialState: InitialState = {
 
 export const registerUser = createAsyncThunk(
   "user/registerUser",
-  async (user: string, thunkAPI) => {
+  async (user: User_TP, thunkAPI) => {
     try {
       const response = await customFetch.post("/auth/register", user);
       return response.data;
@@ -39,9 +39,31 @@ export const registerUser = createAsyncThunk(
 
 export const loginUser = createAsyncThunk(
   "user/loginUser",
-  async (user: string, thunkAPI) => {
+  async (user: User_TP, thunkAPI) => {
     try {
       const response = await customFetch.post("/auth/login", user);
+      return response.data;
+    } catch (error: any) {
+      const errorMsg =
+        error.response && error.response.data.msg
+          ? error.response.data.msg
+          : "An error occurred";
+      toast.error(errorMsg);
+      return thunkAPI.rejectWithValue(errorMsg);
+    }
+  }
+);
+
+export const updateUser = createAsyncThunk(
+  "user/updateUser",
+  async (user: User_TP, thunkAPI) => {
+    try {
+      const response = await customFetch.patch("/auth/updateUser", user, {
+        headers: {
+          Authorization: `Bearer ${thunkAPI.getState().user.user.token}`,
+        },
+      });
+
       return response.data;
     } catch (error: any) {
       const errorMsg =
@@ -94,6 +116,20 @@ export const useSlice = createSlice({
         toast.success(`Welcome back ${user.name}`);
       })
       .addCase(loginUser.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        toast.error(payload as string);
+      })
+      .addCase(updateUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateUser.fulfilled, (state, { payload }) => {
+        const { user } = payload;
+        state.isLoading = false;
+        state.user = user;
+        addToLocalStorage(user);
+        toast.success(`User updated successfully`);
+      })
+      .addCase(updateUser.rejected, (state, { payload }) => {
         state.isLoading = false;
         toast.error(payload as string);
       });

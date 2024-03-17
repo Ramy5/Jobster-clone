@@ -1,7 +1,8 @@
+"use client";
+
 import React from "react";
 import Wrapper from "@/assets/wrappers/SmallSidebar";
 import { Logo } from "..";
-import sidebarLinks from "@/utils/sidebarLinks";
 import Link from "next/link";
 import { FaTimes } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";

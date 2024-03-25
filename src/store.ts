@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import useSlice from "./features/useSlice";
+import jobSlice from "./features/job/jobSlice";
 
 export const store = configureStore({
   reducer: {
     user: useSlice,
+    job: jobSlice,
   },
 });
 

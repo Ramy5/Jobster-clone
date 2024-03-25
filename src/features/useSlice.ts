@@ -7,6 +7,11 @@ import {
 } from "@/utils/localStorage";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
+import {
+  loginUserThunk,
+  registerUserThunk,
+  updateUserThunk,
+} from "./userThunk";
 
 interface InitialState {
   isLoading: boolean;
@@ -23,56 +28,21 @@ const initialState: InitialState = {
 export const registerUser = createAsyncThunk(
   "user/registerUser",
   async (user: User_TP, thunkAPI) => {
-    try {
-      const response = await customFetch.post("/auth/register", user);
-      return response.data;
-    } catch (error: any) {
-      const errorMsg =
-        error.response && error.response.data.msg
-          ? error.response.data.msg
-          : "An error occurred";
-      toast.error(errorMsg);
-      return thunkAPI.rejectWithValue(errorMsg);
-    }
+    return registerUserThunk("/auth/register", user, thunkAPI);
   }
 );
 
 export const loginUser = createAsyncThunk(
   "user/loginUser",
   async (user: User_TP, thunkAPI) => {
-    try {
-      const response = await customFetch.post("/auth/login", user);
-      return response.data;
-    } catch (error: any) {
-      const errorMsg =
-        error.response && error.response.data.msg
-          ? error.response.data.msg
-          : "An error occurred";
-      toast.error(errorMsg);
-      return thunkAPI.rejectWithValue(errorMsg);
-    }
+    return loginUserThunk("/auth/login", user, thunkAPI);
   }
 );
 
 export const updateUser = createAsyncThunk(
   "user/updateUser",
   async (user: User_TP, thunkAPI) => {
-    try {
-      const response = await customFetch.patch("/auth/updateUser", user, {
-        headers: {
-          Authorization: `Bearer ${thunkAPI.getState().user.user.token}`,
-        },
-      });
-
-      return response.data;
-    } catch (error: any) {
-      const errorMsg =
-        error.response && error.response.data.msg
-          ? error.response.data.msg
-          : "An error occurred";
-      toast.error(errorMsg);
-      return thunkAPI.rejectWithValue(errorMsg);
-    }
+    return updateUserThunk("/auth/updateUser", user, thunkAPI);
   }
 );
 

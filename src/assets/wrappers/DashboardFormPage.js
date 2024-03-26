@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from "styled-components";
 
 const Wrapper = styled.section`
   border-radius: var(--borderRadius);
@@ -34,7 +34,7 @@ const Wrapper = styled.section`
     grid-template-columns: 1fr 1fr;
     column-gap: 1rem;
     align-self: flex-end;
-    margin-top: 0.5rem;
+    margin-bottom: 2px;
     button {
       height: 35px;
     }
@@ -63,6 +63,6 @@ const Wrapper = styled.section`
       margin-top: 0;
     }
   }
-`
+`;
 
-export default Wrapper
+export default Wrapper;

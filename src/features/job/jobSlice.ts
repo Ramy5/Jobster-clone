@@ -2,6 +2,7 @@ import customFetch from "@/utils/axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { logoutUser } from "../useSlice";
 import { toast } from "react-toastify";
+import { getFromLocalStorage } from "@/utils/localStorage";
 
 interface initialState_TP {
   isLoading: boolean;
@@ -65,12 +66,13 @@ export const createJob = createAsyncThunk(
   "job/createJob",
   async (job, thunkAPI: any) => {
     try {
-      const response = await customFetch.post("/job", job, {
+      const response = await customFetch.post("/jobs", job, {
         headers: {
           Authorization: `Bearer ${thunkAPI.getState().user.user.token}`,
         },
       });
 
+      thunkAPI.dispatch(clearValues());
       return response.data;
     } catch (error: any) {
       const errorMsg =
@@ -101,7 +103,10 @@ const jobSlice = createSlice({
     },
 
     clearValues: () => {
-      return initialState;
+      return {
+        ...initialState,
+        jobLocation: getFromLocalStorage()?.location || "",
+      };
     },
   },
 
@@ -110,9 +115,9 @@ const jobSlice = createSlice({
       .addCase(createJob.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(createJob.fulfilled, (state, { payload }) => {
+      .addCase(createJob.fulfilled, (state) => {
         state.isLoading = false;
-        toast.success(payload);
+        toast.success("Job created");
       })
       .addCase(createJob.rejected, (state, { payload }) => {
         state.isLoading = false;

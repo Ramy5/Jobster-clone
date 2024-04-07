@@ -6,7 +6,7 @@ import { Logo } from "..";
 import Link from "next/link";
 import { FaTimes } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { toggleSidebar } from "@/features/useSlice";
+import { toggleSidebar } from "@/features/user/useSlice";
 import NavLinks from "../UI/NavLinks";
 
 const SmallSideBar = () => {

@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import Wrapper from "../../assets/wrappers/RegisterPage";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser, registerUser } from "@/features/useSlice";
+import { loginUser, registerUser } from "@/features/user/useSlice";
 import { useRouter } from "next/navigation";
 import { IoMdEyeOff } from "react-icons/io";
 import { IoEye } from "react-icons/io5";

@@ -5,7 +5,7 @@ import Wrapper from "@/assets/wrappers/Navbar";
 import { FaAlignLeft, FaCaretDown, FaUserCircle } from "react-icons/fa";
 import { Logo } from "..";
 import { useDispatch, useSelector } from "react-redux";
-import { logoutUser, toggleSidebar } from "@/features/useSlice";
+import { logoutUser, toggleSidebar } from "@/features/user/useSlice";
 import Link from "next/link";
 
 const NavBar = () => {

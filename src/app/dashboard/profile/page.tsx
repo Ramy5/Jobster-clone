@@ -1,7 +1,7 @@
 "use client";
 import Wrapper from "@/assets/wrappers/DashboardFormPage";
 import { BaseInput } from "@/components";
-import { updateUser } from "@/features/useSlice";
+import { updateUser } from "@/features/user/useSlice";
 import { ChangeEvent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";

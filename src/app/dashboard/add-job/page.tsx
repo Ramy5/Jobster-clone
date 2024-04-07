@@ -24,11 +24,8 @@ const page = () => {
   const dispatch = useDispatch();
 
   const handleChanges = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("🚀 ~ handleChanges ~ name:", e);
     const name = e.target ? e.target.name : e.label;
-    console.log("🚀 ~ handleChanges ~ name:", name);
     const value = e.target ? e.target.value : e.value;
-    console.log("🚀 ~ handleChanges ~ value:", value);
 
     dispatch(handleChange({ name, value }));
   };

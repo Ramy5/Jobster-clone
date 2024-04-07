@@ -2,14 +2,13 @@
 
 import React from "react";
 import Wrapper from "@/assets/wrappers/BigSidebar";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Logo } from "..";
 import NavLinks from "../UI/NavLinks";
 import Link from "next/link";
 
 const BigSideBar = () => {
   const { isSidebarOpen } = useSelector((store: any) => store.user);
-  const dispatch = useDispatch();
 
   return (
     <Wrapper>

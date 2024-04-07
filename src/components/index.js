@@ -7,6 +7,9 @@ import BigSideBar from "./sharedLayout/BigSideBar";
 import SmallSideBar from "./sharedLayout/SmallSideBar";
 import NavBar from "./sharedLayout/NavBar";
 import NavLinks from "./UI/NavLinks";
+import SearchContainer from "./allJobs/SearchContainer";
+import JobsContainer from "./allJobs/JobsContainer";
+import Loading from "./UI/Loading";
 
 export {
   Logo,
@@ -18,4 +21,7 @@ export {
   SmallSideBar,
   NavBar,
   NavLinks,
+  SearchContainer,
+  JobsContainer,
+  Loading
 };

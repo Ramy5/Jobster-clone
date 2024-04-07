@@ -1,11 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Wrapper from "@/assets/wrappers/DashboardFormPage";
 import { BaseInput } from "@/components";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { clearValues, handleChange } from "@/features/job/jobSlice";
+import { clearValues, createJob, handleChange } from "@/features/job/jobSlice";
 import Select from "react-select";
 
 const page = () => {
@@ -22,6 +22,7 @@ const page = () => {
     editJobId,
   } = useSelector((store: any) => store.job);
   const dispatch = useDispatch();
+  const { user } = useSelector((store: any) => store.user);
 
   const handleChanges = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target ? e.target.name : e.label;
@@ -38,19 +39,23 @@ const page = () => {
       return;
     }
 
-    console.log(
+    const jobData = {
       isLoading,
       position,
       company,
       jobLocation,
-      jobTypeOptions,
-      jobType,
-      statusOptions,
-      status,
+      jobType: jobType?.value,
+      status: status?.value,
       isEditing,
-      editJobId
-    );
+      editJobId,
+    };
+
+    dispatch(createJob(jobData));
   };
+
+  useEffect(() => {
+    dispatch(handleChange({ name: "jobLocation", value: user.location }));
+  }, []);
 
   return (
     <Wrapper>

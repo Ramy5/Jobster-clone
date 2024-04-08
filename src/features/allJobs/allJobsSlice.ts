@@ -1,4 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
+import customFetch from "@/utils/axios";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
+import { logoutUser } from "../user/useSlice";
 
 interface filterInitialState_TP {
   search: string;
@@ -37,10 +40,56 @@ const initialState: initialState_TP = {
   ...filterInitialState,
 };
 
+export const getAllJobs = createAsyncThunk(
+  "jobs/getAllJobs",
+  async (_, thunkAPI: any) => {
+    let url = "/jobs";
+
+    try {
+      console.log("🚀 ~ thunkAPI:", thunkAPI);
+
+      const response = await customFetch.get(url, {
+        headers: {
+          Authorization: `Bearer ${thunkAPI.getState().user.user.token}`,
+        },
+      });
+
+      return response.data;
+    } catch (error: any) {
+      const errorMsg =
+        error.response && error.response.data.msg
+          ? error.response.data.msg
+          : "An error occurred";
+
+      if (error?.response?.status === 401) {
+        thunkAPI.dispatch(logoutUser());
+        return thunkAPI.rejectWithValue("Unauthorized! Logging out...");
+      }
+
+      toast.error(errorMsg);
+      return thunkAPI.rejectWithValue(errorMsg);
+    }
+  }
+);
+
 const allJobSlice = createSlice({
   name: "allJobs",
   initialState,
   reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(getAllJobs.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getAllJobs.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.jobs = payload.jobs;
+      })
+      .addCase(getAllJobs.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        toast.error(payload as string);
+      });
+  },
 });
 
 export default allJobSlice.reducer;

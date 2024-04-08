@@ -1,14 +1,19 @@
 "use client";
 
 import Wrapper from "@/assets/wrappers/JobsContainer";
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Job from "./Job";
 import { Loading } from "..";
+import { getAllJobs } from "@/features/allJobs/allJobsSlice";
 
 const JobsContainer = () => {
   const { isLoading, jobs } = useSelector((store: any) => store.allJobs);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllJobs());
+  }, []);
 
   if (isLoading) {
     return <Loading center />;
@@ -28,7 +33,6 @@ const JobsContainer = () => {
 
       <div className="jobs">
         {jobs?.map((job: any) => {
-          console.log("🚀 ~ {jobs?.map ~ job:", job);
           return <Job key={job._id} {...job} />;
         })}
       </div>

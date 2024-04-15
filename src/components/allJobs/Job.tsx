@@ -1,7 +1,13 @@
 "use client";
 
 import Wrapper from "@/assets/wrappers/Job";
+import Link from "next/link";
 import React from "react";
+import JobInfo from "./JobInfo";
+import { FaBriefcase, FaCalendarAlt, FaLocationArrow } from "react-icons/fa";
+import moment from "moment";
+import { useDispatch } from "react-redux";
+import { deleteJob, setEditJob } from "@/features/job/jobSlice";
 
 interface JobProps_TP {
   company: string;
@@ -14,8 +20,11 @@ interface JobProps_TP {
 }
 
 const Job: React.FC<JobProps_TP> = (props) => {
+  const dispatch = useDispatch();
   const { company, createdAt, jobLocation, jobType, position, status, _id } =
     props;
+
+  const date = moment(createdAt).format("MMM Do, YYYY");
 
   return (
     <Wrapper>
@@ -27,6 +36,45 @@ const Job: React.FC<JobProps_TP> = (props) => {
           <p>{company}</p>
         </div>
       </header>
+      <div className="content">
+        <div className="content-center">
+          <JobInfo icon={<FaLocationArrow />} text={jobLocation} />
+          <JobInfo icon={<FaCalendarAlt />} text={date} />
+          <JobInfo icon={<FaBriefcase />} text={jobType} />
+          <div className={`status ${status}`}>{status}</div>
+        </div>
+
+        <footer>
+          <div className="actions">
+            <Link href={"/dashboard/add-job"}>
+              <button
+                className="btn edit-btn"
+                onClick={() =>
+                  dispatch(
+                    setEditJob({
+                      editJobId: _id,
+                      company,
+                      jobLocation,
+                      status,
+                      jobType,
+                      position,
+                    })
+                  )
+                }
+              >
+                edit
+              </button>
+            </Link>
+
+            <button
+              className="btn delete-btn"
+              onClick={() => dispatch(deleteJob(_id))}
+            >
+              delete
+            </button>
+          </div>
+        </footer>
+      </div>
     </Wrapper>
   );
 };

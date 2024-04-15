@@ -10,6 +10,7 @@ import NavLinks from "./UI/NavLinks";
 import SearchContainer from "./allJobs/SearchContainer";
 import JobsContainer from "./allJobs/JobsContainer";
 import Loading from "./UI/Loading";
+import JobInfo from "./allJobs/JobInfo";
 
 export {
   Logo,
@@ -23,5 +24,6 @@ export {
   NavLinks,
   SearchContainer,
   JobsContainer,
-  Loading
+  Loading,
+  JobInfo,
 };

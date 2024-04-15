@@ -46,8 +46,6 @@ export const getAllJobs = createAsyncThunk(
     let url = "/jobs";
 
     try {
-      console.log("🚀 ~ thunkAPI:", thunkAPI);
-
       const response = await customFetch.get(url, {
         headers: {
           Authorization: `Bearer ${thunkAPI.getState().user.user.token}`,
@@ -75,7 +73,15 @@ export const getAllJobs = createAsyncThunk(
 const allJobSlice = createSlice({
   name: "allJobs",
   initialState,
-  reducers: {},
+  reducers: {
+    showLoading: (state) => {
+      state.isLoading = true;
+    },
+
+    hideLoading: (state) => {
+      state.isLoading = false;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getAllJobs.pending, (state) => {
@@ -92,4 +98,5 @@ const allJobSlice = createSlice({
   },
 });
 
+export const { showLoading, hideLoading } = allJobSlice.actions;
 export default allJobSlice.reducer;

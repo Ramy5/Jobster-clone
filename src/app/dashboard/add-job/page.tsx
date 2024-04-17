@@ -5,7 +5,12 @@ import Wrapper from "@/assets/wrappers/DashboardFormPage";
 import { BaseInput } from "@/components";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { clearValues, createJob, handleChange } from "@/features/job/jobSlice";
+import {
+  clearValues,
+  createJob,
+  editJob,
+  handleChange,
+} from "@/features/job/jobSlice";
 import Select from "react-select";
 
 const page = () => {
@@ -40,15 +45,19 @@ const page = () => {
     }
 
     const jobData = {
-      isLoading,
       position,
       company,
       jobLocation,
       jobType: jobType?.value,
       status: status?.value,
-      isEditing,
-      editJobId,
     };
+
+    console.log(editJobId);
+
+    if (isEditing) {
+      dispatch(editJob({ jobId: editJobId, job: jobType }));
+      return;
+    }
 
     dispatch(createJob(jobData));
   };

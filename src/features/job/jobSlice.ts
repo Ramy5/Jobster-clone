@@ -28,6 +28,25 @@ type statusOptions_TP = {
   label: string;
 };
 
+interface job_TP {
+  company: string;
+  position: string;
+  jobType: string;
+  jobLocation: string;
+  status: string;
+}
+interface editJob_TP {
+  jobId: string;
+  job: job_TP;
+}
+interface Payload_TP {
+  name: string;
+  value: string;
+}
+interface State_TP {
+  [key: string]: any;
+}
+
 const statusOptions: statusOptions_TP[] = [
   { value: "interview", label: "interview" },
   { value: "declined", label: "declined" },
@@ -54,20 +73,41 @@ const initialState: initialState_TP = {
   editJobId: "",
 };
 
-interface Payload_TP {
-  name: string;
-  value: string;
-}
-
-interface State_TP {
-  [key: string]: any;
-}
-
 export const createJob = createAsyncThunk(
   "job/createJob",
   async (job, thunkAPI: any) => {
     try {
       const response = await customFetch.post("/jobs", job, {
+        headers: {
+          Authorization: `Bearer ${thunkAPI.getState().user.user.token}`,
+        },
+      });
+
+      thunkAPI.dispatch(clearValues());
+      return response.data;
+    } catch (error: any) {
+      const errorMsg =
+        error.response && error.response.data.msg
+          ? error.response.data.msg
+          : "An error occurred";
+
+      if (error?.response?.status === 401) {
+        thunkAPI.dispatch(logoutUser());
+        return thunkAPI.rejectWithValue("Unauthorized! Logging out...");
+      }
+
+      toast.error(errorMsg);
+      return thunkAPI.rejectWithValue(errorMsg);
+    }
+  }
+);
+
+export const editJob = createAsyncThunk(
+  "job/editJob",
+  async ({ jobId, job }: editJob_TP, thunkAPI: any) => {
+    console.log("🚀 ~ jobId:", jobId);
+    try {
+      const response = await customFetch.patch(`/jobs/${jobId}`, job, {
         headers: {
           Authorization: `Bearer ${thunkAPI.getState().user.user.token}`,
         },
@@ -165,6 +205,17 @@ const jobSlice = createSlice({
         toast.error(payload as string);
       })
       .addCase(deleteJob.rejected, (state, { payload }) => {
+        toast.error(payload as string);
+      })
+      .addCase(editJob.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(editJob.fulfilled, (state) => {
+        state.isLoading = false;
+        toast.success("Job modified...");
+      })
+      .addCase(editJob.rejected, (state, { payload }) => {
+        state.isLoading = false;
         toast.error(payload as string);
       });
   },

@@ -4,6 +4,7 @@ import { logoutUser } from "../user/useSlice";
 import { toast } from "react-toastify";
 import { getFromLocalStorage } from "@/utils/localStorage";
 import { getAllJobs, hideLoading, showLoading } from "../allJobs/allJobsSlice";
+import { createJobThunk, deleteJobThunk, editJobThunk } from "./jobThunk";
 
 interface initialState_TP {
   isLoading: boolean;
@@ -21,14 +22,16 @@ interface initialState_TP {
 type jobTypeOptions_TP = {
   value: string;
   label: string;
+  name: string;
 };
 
 type statusOptions_TP = {
   value: string;
   label: string;
+  name: string;
 };
 
-interface job_TP {
+export interface job_TP {
   company: string;
   position: string;
   jobType: string;
@@ -48,16 +51,16 @@ interface State_TP {
 }
 
 const statusOptions: statusOptions_TP[] = [
-  { value: "interview", label: "interview" },
-  { value: "declined", label: "declined" },
-  { value: "pending", label: "pending" },
+  { value: "interview", label: "interview", name: "status" },
+  { value: "declined", label: "declined", name: "status" },
+  { value: "pending", label: "pending", name: "status" },
 ];
 
 const jobTypeOptions: jobTypeOptions_TP[] = [
-  { value: "full-time", label: "full-time" },
-  { value: "part-time", label: "part-time" },
-  { value: "remote", label: "remote" },
-  { value: "internship", label: "internship" },
+  { value: "full-time", label: "full-time", name: "jobType" },
+  { value: "part-time", label: "part-time", name: "jobType" },
+  { value: "remote", label: "remote", name: "jobType" },
+  { value: "internship", label: "internship", name: "jobType" },
 ];
 
 const initialState: initialState_TP = {
@@ -66,102 +69,27 @@ const initialState: initialState_TP = {
   company: "",
   jobLocation: "",
   jobTypeOptions,
-  jobType: { value: "full-time", label: "full-time" },
+  jobType: { value: "full-time", label: "full-time", name: "jobType" },
   statusOptions,
-  status: { value: "pending", label: "pending" },
+  status: { value: "pending", label: "pending", name: "status" },
   isEditing: false,
   editJobId: "",
 };
 
 export const createJob = createAsyncThunk(
   "job/createJob",
-  async (job, thunkAPI: any) => {
-    try {
-      const response = await customFetch.post("/jobs", job, {
-        headers: {
-          Authorization: `Bearer ${thunkAPI.getState().user.user.token}`,
-        },
-      });
-
-      thunkAPI.dispatch(clearValues());
-      return response.data;
-    } catch (error: any) {
-      const errorMsg =
-        error.response && error.response.data.msg
-          ? error.response.data.msg
-          : "An error occurred";
-
-      if (error?.response?.status === 401) {
-        thunkAPI.dispatch(logoutUser());
-        return thunkAPI.rejectWithValue("Unauthorized! Logging out...");
-      }
-
-      toast.error(errorMsg);
-      return thunkAPI.rejectWithValue(errorMsg);
-    }
-  }
+  async (job, thunkAPI: any) => createJobThunk("/jobs", job, thunkAPI)
 );
 
 export const editJob = createAsyncThunk(
   "job/editJob",
-  async ({ jobId, job }: editJob_TP, thunkAPI: any) => {
-    console.log("🚀 ~ jobId:", jobId);
-    try {
-      const response = await customFetch.patch(`/jobs/${jobId}`, job, {
-        headers: {
-          Authorization: `Bearer ${thunkAPI.getState().user.user.token}`,
-        },
-      });
-
-      thunkAPI.dispatch(clearValues());
-      return response.data;
-    } catch (error: any) {
-      const errorMsg =
-        error.response && error.response.data.msg
-          ? error.response.data.msg
-          : "An error occurred";
-
-      if (error?.response?.status === 401) {
-        thunkAPI.dispatch(logoutUser());
-        return thunkAPI.rejectWithValue("Unauthorized! Logging out...");
-      }
-
-      toast.error(errorMsg);
-      return thunkAPI.rejectWithValue(errorMsg);
-    }
-  }
+  async ({ jobId, job }: editJob_TP, thunkAPI: any) =>
+    editJobThunk(`/jobs/${jobId}`, job, thunkAPI)
 );
 
 export const deleteJob = createAsyncThunk(
   "job/deleteJob",
-  async (jobId, thunkAPI: any) => {
-    thunkAPI.dispatch(showLoading());
-
-    try {
-      const response = await customFetch.delete(`/jobs/${jobId}`, {
-        headers: {
-          Authorization: `Bearer ${thunkAPI.getState().user.user.token}`,
-        },
-      });
-
-      thunkAPI.dispatch(getAllJobs());
-      return response.data.msg;
-    } catch (error: any) {
-      thunkAPI.dispatch(hideLoading());
-      const errorMsg =
-        error.response && error.response.data.msg
-          ? error.response.data.msg
-          : "An error occurred";
-
-      if (error?.response?.status === 401) {
-        thunkAPI.dispatch(logoutUser());
-        return thunkAPI.rejectWithValue("Unauthorized! Logging out...");
-      }
-
-      toast.error(errorMsg);
-      return thunkAPI.rejectWithValue(errorMsg);
-    }
-  }
+  async (jobId, thunkAPI: any) => deleteJobThunk(`/jobs/${jobId}`, thunkAPI)
 );
 
 const jobSlice = createSlice({

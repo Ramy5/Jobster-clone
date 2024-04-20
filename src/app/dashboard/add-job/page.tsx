@@ -30,7 +30,7 @@ const page = () => {
   const { user } = useSelector((store: any) => store.user);
 
   const handleChanges = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const name = e.target ? e.target.name : e.label;
+    const name = e.target ? e.target.name : e.name;
     const value = e.target ? e.target.value : e.value;
 
     dispatch(handleChange({ name, value }));
@@ -48,14 +48,12 @@ const page = () => {
       position,
       company,
       jobLocation,
-      jobType: jobType?.value,
-      status: status?.value,
+      jobType,
+      status,
     };
 
-    console.log(editJobId);
-
     if (isEditing) {
-      dispatch(editJob({ jobId: editJobId, job: jobType }));
+      dispatch(editJob({ jobId: editJobId, job: jobData }));
       return;
     }
 

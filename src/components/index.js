@@ -13,6 +13,7 @@ import Loading from "./UI/Loading";
 import JobInfo from "./allJobs/JobInfo";
 import StatsContainer from "./stats/StatsContainer";
 import ChartsContainer from "./stats/ChartsContainer";
+import { AreaChart, BarChart } from "recharts";
 
 export {
   Logo,

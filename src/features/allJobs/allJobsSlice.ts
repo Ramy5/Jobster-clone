@@ -70,6 +70,30 @@ export const getAllJobs = createAsyncThunk(
   }
 );
 
+export const showStats = createAsyncThunk(
+  "jobs/showStats",
+  async (_, thunkAPI) => {
+    try {
+      const response = await customFetch.get("/jobs/stats");
+      console.log(response.data);
+      return response.data;
+    } catch (error: any) {
+      const errorMsg =
+        error.response && error.response.data.msg
+          ? error.response.data.msg
+          : "An error occurred";
+
+      if (error?.response?.status === 401) {
+        thunkAPI.dispatch(logoutUser());
+        return thunkAPI.rejectWithValue("Unauthorized! Logging out...");
+      }
+
+      toast.error(errorMsg);
+      return thunkAPI.rejectWithValue(errorMsg);
+    }
+  }
+);
+
 const allJobSlice = createSlice({
   name: "allJobs",
   initialState,
@@ -92,6 +116,18 @@ const allJobSlice = createSlice({
         state.jobs = payload.jobs;
       })
       .addCase(getAllJobs.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        toast.error(payload as string);
+      })
+      .addCase(showStats.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(showStats.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.stats = payload.defaultStats;
+        state.monthlyApplications = payload.monthlyApplications;
+      })
+      .addCase(showStats.rejected, (state, { payload }) => {
         state.isLoading = false;
         toast.error(payload as string);
       });

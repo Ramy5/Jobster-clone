@@ -8,7 +8,7 @@ interface filterInitialState_TP {
   searchStatus: string;
   searchType: string;
   sort: string;
-  sortOption: string[];
+  sortOption: sortOption_TP[];
 }
 
 interface initialState_TP extends filterInitialState_TP {
@@ -21,12 +21,25 @@ interface initialState_TP extends filterInitialState_TP {
   monthlyApplications: any[];
 }
 
+interface sortOption_TP {
+  value: string;
+  label: string;
+  name: string;
+}
+
+const sortOption: sortOption_TP[] = [
+  { value: "latest", label: "latest", name: "sort" },
+  { value: "oldest", label: "oldest", name: "sort" },
+  { value: "a-z", label: "a-z", name: "sort" },
+  { value: "z-a", label: "z-a", name: "sort" },
+];
+
 const filterInitialState: filterInitialState_TP = {
   search: "",
   searchStatus: "all",
   searchType: "all",
   sort: "latest",
-  sortOption: ["latest", "oldest", "a-z", "z-a"],
+  sortOption,
 };
 
 const initialState: initialState_TP = {
@@ -42,7 +55,7 @@ const initialState: initialState_TP = {
 
 export const getAllJobs = createAsyncThunk(
   "jobs/getAllJobs",
-  async (_, thunkAPI: any) => {
+  async (_: any, thunkAPI: any) => {
     let url = "/jobs";
 
     try {
@@ -72,7 +85,7 @@ export const getAllJobs = createAsyncThunk(
 
 export const showStats = createAsyncThunk(
   "jobs/showStats",
-  async (_, thunkAPI) => {
+  async (_: any, thunkAPI: any) => {
     try {
       const response = await customFetch.get("/jobs/stats");
       console.log(response.data);
@@ -98,39 +111,55 @@ const allJobSlice = createSlice({
   name: "allJobs",
   initialState,
   reducers: {
-    showLoading: (state) => {
+    showLoading: (state: any) => {
       state.isLoading = true;
     },
 
-    hideLoading: (state) => {
+    hideLoading: (state: any) => {
       state.isLoading = false;
     },
+
+    clearFilters: (state: any) => {
+      return { ...state, ...filterInitialState };
+    },
   },
-  extraReducers: (builder) => {
+  extraReducers: (builder: any) => {
     builder
-      .addCase(getAllJobs.pending, (state) => {
+      .addCase(getAllJobs.pending, (state: any) => {
         state.isLoading = true;
       })
-      .addCase(getAllJobs.fulfilled, (state, { payload }) => {
-        state.isLoading = false;
-        state.jobs = payload.jobs;
-      })
-      .addCase(getAllJobs.rejected, (state, { payload }) => {
-        state.isLoading = false;
-        toast.error(payload as string);
-      })
-      .addCase(showStats.pending, (state) => {
+      .addCase(
+        getAllJobs.fulfilled,
+        (state: any, { payload }: { payload: any }) => {
+          state.isLoading = false;
+          state.jobs = payload.jobs;
+        }
+      )
+      .addCase(
+        getAllJobs.rejected,
+        (state: any, { payload }: { payload: any }) => {
+          state.isLoading = false;
+          toast.error(payload as string);
+        }
+      )
+      .addCase(showStats.pending, (state: any) => {
         state.isLoading = true;
       })
-      .addCase(showStats.fulfilled, (state, { payload }) => {
-        state.isLoading = false;
-        state.stats = payload.defaultStats;
-        state.monthlyApplications = payload.monthlyApplications;
-      })
-      .addCase(showStats.rejected, (state, { payload }) => {
-        state.isLoading = false;
-        toast.error(payload as string);
-      });
+      .addCase(
+        showStats.fulfilled,
+        (state: any, { payload }: { payload: any }) => {
+          state.isLoading = false;
+          state.stats = payload.defaultStats;
+          state.monthlyApplications = payload.monthlyApplications;
+        }
+      )
+      .addCase(
+        showStats.rejected,
+        (state: any, { payload }: { payload: any }) => {
+          state.isLoading = false;
+          toast.error(payload as string);
+        }
+      );
   },
 });
 

@@ -1,9 +1,6 @@
-import customFetch from "@/utils/axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { logoutUser } from "../user/useSlice";
 import { toast } from "react-toastify";
 import { getFromLocalStorage } from "@/utils/localStorage";
-import { getAllJobs, hideLoading, showLoading } from "../allJobs/allJobsSlice";
 import { createJobThunk, deleteJobThunk, editJobThunk } from "./jobThunk";
 
 interface initialState_TP {
@@ -78,7 +75,7 @@ const initialState: initialState_TP = {
 
 export const createJob = createAsyncThunk(
   "job/createJob",
-  async (job, thunkAPI: any) => createJobThunk("/jobs", job, thunkAPI)
+  async (job: job_TP, thunkAPI: any) => createJobThunk("/jobs", job, thunkAPI)
 );
 
 export const editJob = createAsyncThunk(
@@ -89,7 +86,8 @@ export const editJob = createAsyncThunk(
 
 export const deleteJob = createAsyncThunk(
   "job/deleteJob",
-  async (jobId, thunkAPI: any) => deleteJobThunk(`/jobs/${jobId}`, thunkAPI)
+  async (jobId: string, thunkAPI: any) =>
+    deleteJobThunk(`/jobs/${jobId}`, thunkAPI)
 );
 
 const jobSlice = createSlice({
@@ -115,37 +113,50 @@ const jobSlice = createSlice({
     },
   },
 
-  extraReducers: (builder) => {
+  extraReducers: (builder: any) => {
     builder
-      .addCase(createJob.pending, (state) => {
+      .addCase(createJob.pending, (state: any) => {
         state.isLoading = true;
       })
-      .addCase(createJob.fulfilled, (state) => {
+      .addCase(createJob.fulfilled, (state: any) => {
         state.isLoading = false;
         toast.success("Job created");
       })
-      .addCase(createJob.rejected, (state, { payload }) => {
-        state.isLoading = false;
-        toast.error(payload as string);
-      })
-      .addCase(deleteJob.fulfilled, (state, { payload }) => {
-        state.isLoading = false;
-        toast.error(payload as string);
-      })
-      .addCase(deleteJob.rejected, (state, { payload }) => {
-        toast.error(payload as string);
-      })
-      .addCase(editJob.pending, (state) => {
+      .addCase(
+        createJob.rejected,
+        (state: any, { payload }: { payload: any }) => {
+          state.isLoading = false;
+          toast.error(payload as string);
+        }
+      )
+      .addCase(
+        deleteJob.fulfilled,
+        (state: any, { payload }: { payload: any }) => {
+          state.isLoading = false;
+          toast.error(payload as string);
+        }
+      )
+      .addCase(
+        deleteJob.rejected,
+        (state: any, { payload }: { payload: any }) => {
+          toast.error(payload as string);
+          state.isLoading = false;
+        }
+      )
+      .addCase(editJob.pending, (state: any) => {
         state.isLoading = true;
       })
-      .addCase(editJob.fulfilled, (state) => {
+      .addCase(editJob.fulfilled, (state: any) => {
         state.isLoading = false;
         toast.success("Job modified...");
       })
-      .addCase(editJob.rejected, (state, { payload }) => {
-        state.isLoading = false;
-        toast.error(payload as string);
-      });
+      .addCase(
+        editJob.rejected,
+        (state: any, { payload }: { payload: any }) => {
+          state.isLoading = false;
+          toast.error(payload as string);
+        }
+      );
   },
 });
 

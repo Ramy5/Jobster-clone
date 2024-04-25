@@ -119,6 +119,13 @@ const allJobSlice = createSlice({
       state.isLoading = false;
     },
 
+    handleChange: (
+      state: any,
+      { payload: { name, value } }: { payload: { name: string; value: string } }
+    ) => {
+      state[name] = value;
+    },
+
     clearFilters: (state: any) => {
       return { ...state, ...filterInitialState };
     },
@@ -133,6 +140,9 @@ const allJobSlice = createSlice({
         (state: any, { payload }: { payload: any }) => {
           state.isLoading = false;
           state.jobs = payload.jobs;
+          state.page = payload.page;
+          state.numOfPages = payload.numOfPages;
+          state.totalJobs = payload.totalJobs;
         }
       )
       .addCase(
@@ -163,5 +173,6 @@ const allJobSlice = createSlice({
   },
 });
 
-export const { showLoading, hideLoading } = allJobSlice.actions;
+export const { showLoading, hideLoading, handleChange, clearFilters } =
+  allJobSlice.actions;
 export default allJobSlice.reducer;

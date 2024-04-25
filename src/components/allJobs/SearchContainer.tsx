@@ -5,27 +5,26 @@ import React from "react";
 import BaseInput from "../UI/BaseInput";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
-import { clearValues, handleChange } from "@/features/job/jobSlice";
+import { clearFilters, handleChange } from "@/features/allJobs/allJobsSlice";
 
 const SearchContainer = () => {
   const dispatch = useDispatch();
-  const { sortOption, sort, searchType, searchStatus, search } = useSelector(
-    (store: any) => store.allJobs
-  );
+  const { sortOption, sort, searchType, searchStatus, search, isLoading } =
+    useSelector((store: any) => store.allJobs);
   const { statusOptions, jobTypeOptions } = useSelector(
     (store: any) => store.job
   );
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const name = e.target ? e.target.name : e.name;
-    const value = e.target ? e.target.value : e.value;
+    const name = e?.target ? e?.target?.name : e?.name;
+    const value = e?.target ? e?.target?.value : e?.value;
 
     dispatch(handleChange({ name, value }));
   };
 
   const handleClearValues = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(clearValues());
+    dispatch(clearFilters());
   };
 
   return (
@@ -43,18 +42,18 @@ const SearchContainer = () => {
 
           {/* SEARCH BY STATUS */}
           <div>
-            <label className="form-label" htmlFor="status">
+            <label className="form-label" htmlFor="searchStatus">
               status
             </label>
 
             <Select
-              defaultValue={searchStatus}
               isClearable={true}
               isSearchable={true}
-              name="status"
-              id="status"
+              name="searchStatus"
+              id="searchStatus"
+              defaultValue={searchStatus}
               options={[
-                { value: "all", label: "all", name: "status" },
+                { value: "all", label: "all", name: "searchStatus" },
                 ,
                 ...statusOptions,
               ]}
@@ -64,7 +63,7 @@ const SearchContainer = () => {
 
           {/* SEARCH BY TYPE */}
           <div>
-            <label className="form-label" htmlFor="jobType">
+            <label className="form-label" htmlFor="searchType">
               type
             </label>
 
@@ -72,10 +71,10 @@ const SearchContainer = () => {
               defaultValue={searchType}
               isClearable={true}
               isSearchable={true}
-              name="jobType"
-              id="jobType"
+              name="searchType"
+              id="searchType"
               options={[
-                { value: "all", label: "all", name: "jobType" },
+                { value: "all", label: "all", name: "searchType" },
                 ...jobTypeOptions,
               ]}
               onChange={handleSearchChange}
@@ -99,7 +98,9 @@ const SearchContainer = () => {
             />
           </div>
 
-          <button className="btn btn-block btn-danger">clear filters</button>
+          <button type="submit" className="btn btn-block btn-danger">
+            clear filters
+          </button>
         </div>
       </form>
     </Wrapper>

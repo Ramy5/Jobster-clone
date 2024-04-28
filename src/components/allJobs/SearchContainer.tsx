@@ -9,10 +9,8 @@ import { clearFilters, handleChange } from "@/features/allJobs/allJobsSlice";
 
 const SearchContainer = () => {
   const dispatch = useDispatch();
-  const { sortOption, sort, searchType, searchStatus, search, isLoading } =
-    useSelector((store: any) => store.allJobs);
-  const { statusOptions, jobTypeOptions } = useSelector(
-    (store: any) => store.job
+  const { sortOption, sort, searchType, searchStatus, search } = useSelector(
+    (store: any) => store.allJobs
   );
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,8 +52,13 @@ const SearchContainer = () => {
               defaultValue={searchStatus}
               options={[
                 { value: "all", label: "all", name: "searchStatus" },
-                ,
-                ...statusOptions,
+                { value: "pending", label: "pending", name: "searchStatus" },
+                { value: "declined", label: "declined", name: "searchStatus" },
+                {
+                  value: "interview",
+                  label: "interview",
+                  name: "searchStatus",
+                },
               ]}
               onChange={handleSearchChange}
             />
@@ -75,7 +78,14 @@ const SearchContainer = () => {
               id="searchType"
               options={[
                 { value: "all", label: "all", name: "searchType" },
-                ...jobTypeOptions,
+                { value: "remote", label: "remote", name: "searchType" },
+                { value: "full-time", label: "full-time", name: "searchType" },
+                { value: "part-time", label: "part-time", name: "searchType" },
+                {
+                  value: "internship",
+                  label: "internship",
+                  name: "searchType",
+                },
               ]}
               onChange={handleSearchChange}
             />

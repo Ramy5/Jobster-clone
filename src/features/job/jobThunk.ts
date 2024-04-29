@@ -1,7 +1,5 @@
-import customFetch from "@/utils/axios";
+import customFetch, { checkForUnauthorizedResponse } from "@/utils/axios";
 import { clearValues, job_TP } from "./jobSlice";
-import { logoutUser } from "../user/useSlice";
-import { toast } from "react-toastify";
 import { getAllJobs, hideLoading, showLoading } from "../allJobs/allJobsSlice";
 
 export const createJobThunk = async (url: string, job: any, thunkAPI: any) => {
@@ -15,18 +13,7 @@ export const createJobThunk = async (url: string, job: any, thunkAPI: any) => {
     thunkAPI.dispatch(clearValues());
     return response.data;
   } catch (error: any) {
-    const errorMsg =
-      error.response && error.response.data.msg
-        ? error.response.data.msg
-        : "An error occurred";
-
-    if (error?.response?.status === 401) {
-      thunkAPI.dispatch(logoutUser());
-      return thunkAPI.rejectWithValue("Unauthorized! Logging out...");
-    }
-
-    toast.error(errorMsg);
-    return thunkAPI.rejectWithValue(errorMsg);
+    return checkForUnauthorizedResponse(error, thunkAPI);
   }
 };
 
@@ -41,18 +28,7 @@ export const editJobThunk = async (url: string, job: job_TP, thunkAPI: any) => {
     thunkAPI.dispatch(clearValues());
     return response.data;
   } catch (error: any) {
-    const errorMsg =
-      error.response && error.response.data.msg
-        ? error.response.data.msg
-        : "An error occurred";
-
-    if (error?.response?.status === 401) {
-      thunkAPI.dispatch(logoutUser());
-      return thunkAPI.rejectWithValue("Unauthorized! Logging out...");
-    }
-
-    toast.error(errorMsg);
-    return thunkAPI.rejectWithValue(errorMsg);
+    return checkForUnauthorizedResponse(error, thunkAPI);
   }
 };
 
@@ -70,17 +46,6 @@ export const deleteJobThunk = async (url: string, thunkAPI: any) => {
     return response.data.msg;
   } catch (error: any) {
     thunkAPI.dispatch(hideLoading());
-    const errorMsg =
-      error.response && error.response.data.msg
-        ? error.response.data.msg
-        : "An error occurred";
-
-    if (error?.response?.status === 401) {
-      thunkAPI.dispatch(logoutUser());
-      return thunkAPI.rejectWithValue("Unauthorized! Logging out...");
-    }
-
-    toast.error(errorMsg);
-    return thunkAPI.rejectWithValue(errorMsg);
+    return checkForUnauthorizedResponse(error, thunkAPI);
   }
 };

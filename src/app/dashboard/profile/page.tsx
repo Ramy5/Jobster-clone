@@ -32,8 +32,6 @@ const page = () => {
       return;
     }
 
-    console.log(userData);
-
     dispatch(updateUser(userData));
   };
 

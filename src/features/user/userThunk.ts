@@ -1,7 +1,8 @@
-import customFetch from "@/utils/axios";
+import customFetch, { checkForUnauthorizedResponse } from "@/utils/axios";
 import { User_TP } from "@/utils/localStorage";
-import { toast } from "react-toastify";
 import { logoutUser } from "./useSlice";
+import { clearValues } from "../job/jobSlice";
+import { clearState } from "../allJobs/allJobsSlice";
 
 export const registerUserThunk = async (
   url: string,
@@ -12,12 +13,7 @@ export const registerUserThunk = async (
     const response = await customFetch.post(url, user);
     return response.data;
   } catch (error: any) {
-    const errorMsg =
-      error.response && error.response.data.msg
-        ? error.response.data.msg
-        : "An error occurred";
-    toast.error(errorMsg);
-    return thunkAPI.rejectWithValue(errorMsg);
+    return checkForUnauthorizedResponse(error, thunkAPI);
   }
 };
 
@@ -30,12 +26,7 @@ export const loginUserThunk = async (
     const response = await customFetch.post(url, user);
     return response.data;
   } catch (error: any) {
-    const errorMsg =
-      error.response && error.response.data.msg
-        ? error.response.data.msg
-        : "An error occurred";
-    toast.error(errorMsg);
-    return thunkAPI.rejectWithValue(errorMsg);
+    return checkForUnauthorizedResponse(error, thunkAPI);
   }
 };
 
@@ -53,17 +44,17 @@ export const updateUserThunk = async (
 
     return response.data;
   } catch (error: any) {
-    const errorMsg =
-      error.response && error.response.data.msg
-        ? error.response.data.msg
-        : "An error occurred";
+    return checkForUnauthorizedResponse(error, thunkAPI);
+  }
+};
 
-    if (error?.response?.status === 401) {
-      thunkAPI.dispatch(logoutUser());
-      return thunkAPI.rejectWithValue("Unauthorized! Logging out...");
-    }
-
-    toast.error(errorMsg);
-    return thunkAPI.rejectWithValue(errorMsg);
+export const clearAllStateThunk = async (message: any, thunkAPI: any) => {
+  try {
+    thunkAPI.dispatch(logoutUser(message));
+    thunkAPI.dispatch(clearValues());
+    thunkAPI.dispatch(clearState());
+    return Promise.resolve();
+  } catch (error) {
+    return Promise.reject();
   }
 };

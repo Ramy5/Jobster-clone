@@ -1,7 +1,7 @@
 import customFetch from "@/utils/axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
-import { logoutUser } from "../user/useSlice";
+import { getAllJobsThunk, showStatsThunk } from "./allJobsThunk";
 
 interface filterInitialState_TP {
   search: string;
@@ -53,66 +53,9 @@ const initialState: initialState_TP = {
   ...filterInitialState,
 };
 
-export const getAllJobs = createAsyncThunk(
-  "jobs/getAllJobs",
-  async (_: any, thunkAPI: any) => {
-    const { page, search, searchStatus, searchType, sort } =
-      thunkAPI.getState().allJobs;
+export const getAllJobs = createAsyncThunk("jobs/getAllJobs", getAllJobsThunk);
 
-    let url = `/jobs?status=${searchStatus}&jobType=${searchType}&sort=${sort}&page=${page}`;
-
-    if (search) {
-      url += `&search=${search}`;
-    }
-
-    try {
-      const response = await customFetch.get(url, {
-        headers: {
-          Authorization: `Bearer ${thunkAPI.getState().user.user.token}`,
-        },
-      });
-
-      return response.data;
-    } catch (error: any) {
-      const errorMsg =
-        error.response && error.response.data.msg
-          ? error.response.data.msg
-          : "An error occurred";
-
-      if (error?.response?.status === 401) {
-        thunkAPI.dispatch(logoutUser());
-        return thunkAPI.rejectWithValue("Unauthorized! Logging out...");
-      }
-
-      toast.error(errorMsg);
-      return thunkAPI.rejectWithValue(errorMsg);
-    }
-  }
-);
-
-export const showStats = createAsyncThunk(
-  "jobs/showStats",
-  async (_: any, thunkAPI: any) => {
-    try {
-      const response = await customFetch.get("/jobs/stats");
-      console.log(response.data);
-      return response.data;
-    } catch (error: any) {
-      const errorMsg =
-        error.response && error.response.data.msg
-          ? error.response.data.msg
-          : "An error occurred";
-
-      if (error?.response?.status === 401) {
-        thunkAPI.dispatch(logoutUser());
-        return thunkAPI.rejectWithValue("Unauthorized! Logging out...");
-      }
-
-      toast.error(errorMsg);
-      return thunkAPI.rejectWithValue(errorMsg);
-    }
-  }
-);
+export const showStats = createAsyncThunk("jobs/showStats", showStatsThunk);
 
 const allJobSlice = createSlice({
   name: "allJobs",
@@ -130,6 +73,7 @@ const allJobSlice = createSlice({
       state: any,
       { payload: { name, value } }: { payload: { name: string; value: string } }
     ) => {
+      state.page = 1;
       state[name] = value;
     },
 
@@ -140,6 +84,8 @@ const allJobSlice = createSlice({
     changePage: (state, { payload }: { payload: any }) => {
       state.page = payload;
     },
+
+    clearState: (state) => initialState
   },
   extraReducers: (builder: any) => {
     builder
@@ -189,5 +135,6 @@ export const {
   handleChange,
   clearFilters,
   changePage,
+  clearState
 } = allJobSlice.actions;
 export default allJobSlice.reducer;

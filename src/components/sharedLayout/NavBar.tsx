@@ -5,8 +5,13 @@ import Wrapper from "@/assets/wrappers/Navbar";
 import { FaAlignLeft, FaCaretDown, FaUserCircle } from "react-icons/fa";
 import { Logo } from "..";
 import { useDispatch, useSelector } from "react-redux";
-import { logoutUser, toggleSidebar } from "@/features/user/useSlice";
+import {
+  clearAllState,
+  logoutUser,
+  toggleSidebar,
+} from "@/features/user/useSlice";
 import Link from "next/link";
+import { clearAllStateThunk } from "@/features/allJobs/allJobsThunk";
 
 const NavBar = () => {
   const [showLogout, setShowLogout] = useState<boolean>(false);
@@ -43,7 +48,7 @@ const NavBar = () => {
             <button
               type="button"
               className="dropdown-btn"
-              onClick={() => dispatch(logoutUser("Logging out..."))}
+              onClick={() => dispatch(clearAllState("Logging out..."))}
             >
               Logout
             </button>

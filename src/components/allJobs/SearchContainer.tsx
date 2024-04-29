@@ -9,14 +9,14 @@ import { clearFilters, handleChange } from "@/features/allJobs/allJobsSlice";
 
 const SearchContainer = () => {
   const dispatch = useDispatch();
-  const { sortOption, sort, searchType, searchStatus, search } = useSelector(
-    (store: any) => store.allJobs
-  );
+  const { sortOption, sort, searchType, searchStatus, search, isLoading } =
+    useSelector((store: any) => store.allJobs);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e?.target ? e?.target?.name : e?.name;
     const value = e?.target ? e?.target?.value : e?.value;
 
+    if (isLoading) return;
     dispatch(handleChange({ name, value }));
   };
 

@@ -1,13 +1,14 @@
 "use client";
 
 import Wrapper from "@/assets/wrappers/SearchContainer";
-import React from "react";
+import React, { ChangeEvent, useState } from "react";
 import BaseInput from "../UI/BaseInput";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 import { clearFilters, handleChange } from "@/features/allJobs/allJobsSlice";
 
 const SearchContainer = () => {
+  const [localSearch, setLocalSearch] = useState("");
   const dispatch = useDispatch();
   const { sortOption, sort, searchType, searchStatus, search, isLoading } =
     useSelector((store: any) => store.allJobs);
@@ -16,13 +17,24 @@ const SearchContainer = () => {
     const name = e?.target ? e?.target?.name : e?.name;
     const value = e?.target ? e?.target?.value : e?.value;
 
-    if (isLoading) return;
     dispatch(handleChange({ name, value }));
   };
 
   const handleClearValues = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(clearFilters());
+  };
+
+  const debounce = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLocalSearch(e.target.value);
+    const timeOut = setTimeout(() => {
+      const name = e?.target?.name;
+      const value = e?.target?.value;
+
+      dispatch(handleChange({ name, value }));
+    }, 1000);
+
+    return () => clearTimeout(timeOut);
   };
 
   return (
@@ -34,8 +46,8 @@ const SearchContainer = () => {
           {/* SEARCH BY WORD */}
           <BaseInput
             name="search"
-            value={search}
-            onChange={handleSearchChange}
+            value={localSearch}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => debounce(e)}
           />
 
           {/* SEARCH BY STATUS */}

@@ -1,27 +1,43 @@
 "use client";
 
-import React from "react";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+import Chart from "chart.js/auto";
+import React, { useEffect, useRef } from "react";
 
 const BarChartsComponent = ({ data }: any) => {
+  const chartRef = useRef(null);
+
+  useEffect(() => {
+    const chartConfig = {
+      type: "bar",
+      data: {
+        labels: data.map((row: any) => row.date),
+        datasets: [
+          {
+            label: "Jobs created by year",
+            data: data.map((row: any) => row.count),
+          },
+        ],
+      },
+    };
+
+    if (chartRef.current) {
+      chartRef.current.destroy();
+    }
+
+    const ctx = document.getElementById("acquisitions").getContext("2d");
+    chartRef.current = new Chart(ctx, chartConfig);
+
+    return () => {
+      if (chartRef.current) {
+        chartRef.current.destroy();
+      }
+    };
+  }, []);
+
   return (
-    <ResponsiveContainer width="100%" height="100%">
-      <BarChart margin={{ top: 50 }} data={data}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="date" />
-        <YAxis allowDecimals={false} />
-        <Tooltip />
-        <Bar dataKey="count" fill="#3b82f6" barSize={75} />
-      </BarChart>
-    </ResponsiveContainer>
+    <div style={{ width: "100%" }}>
+      <canvas id="acquisitions"></canvas>
+    </div>
   );
 };
 

@@ -1,32 +1,45 @@
 "use client";
 
-import React from "react";
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+import Chart from "chart.js/auto";
+import React, { useEffect, useRef } from "react";
 
 const AreaChartComponent = ({ data }: any) => {
+  const chartRef = useRef(null);
+
+  useEffect(() => {
+    const chartConfig = {
+      type: "line",
+      data: {
+        labels: data.map((row: any) => row.date),
+        datasets: [
+          {
+            label: "Jobs created by year",
+            data: data.map((row: any) => row.count),
+            fill: true,
+            backgroundColor: "rgba(54, 162, 235, 0.2)",
+            borderColor: "rgba(54, 162, 235, 1)",
+            borderWidth: 1,
+          },
+        ],
+      },
+    };
+
+    if (chartRef.current) chartRef.current.destroy();
+
+    const ctx = document.getElementById("acquisitions").getContext("2d");
+    chartRef.current = new Chart(ctx, chartConfig);
+
+    return () => {
+      if (chartRef.current) {
+        chartRef.current.destroy();
+      }
+    };
+  }, []);
+
   return (
-    <ResponsiveContainer width="100%" height="300">
-      <AreaChart
-        data={data}
-        margin={{
-          top: 50,
-        }}
-      >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="date" />
-        <YAxis allowDecimals={false} />
-        <Tooltip />
-        <Area type="monotone" dataKey="count" stroke="#1e3a8a" fill="#3b82f6" />
-      </AreaChart>
-    </ResponsiveContainer>
+    <div style={{ width: "100%" }}>
+      <canvas id="acquisitions"></canvas>
+    </div>
   );
 };
 

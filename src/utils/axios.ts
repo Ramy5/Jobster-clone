@@ -1,3 +1,5 @@
+"use client"
+
 import axios from "axios";
 import { getFromLocalStorage } from "./localStorage";
 import { logoutUser } from "@/features/user/useSlice";

@@ -1,3 +1,5 @@
+"use client";
+
 import {
   User_TP,
   addToLocalStorage,

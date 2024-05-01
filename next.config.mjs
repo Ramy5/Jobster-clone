@@ -3,7 +3,7 @@
 /**
  * @type {import('next').NextConfig}
  **/
-module.exports = {
+const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -12,3 +12,5 @@ module.exports = {
     ignoreDuringBuilds: true,
   },
 };
+
+export default nextConfig;

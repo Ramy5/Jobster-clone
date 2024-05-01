@@ -11,7 +11,6 @@ import {
   toggleSidebar,
 } from "@/features/user/useSlice";
 import Link from "next/link";
-import { clearAllStateThunk } from "@/features/allJobs/allJobsThunk";
 
 const NavBar = () => {
   const [showLogout, setShowLogout] = useState<boolean>(false);

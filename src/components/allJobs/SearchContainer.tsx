@@ -14,8 +14,8 @@ const SearchContainer = () => {
     useSelector((store: any) => store.allJobs);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const name = e?.target ? e?.target?.name : e?.name;
-    const value = e?.target ? e?.target?.value : e?.value;
+    const name = e?.name;
+    const value = e?.value;
 
     dispatch(handleChange({ name, value }));
   };

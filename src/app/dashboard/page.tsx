@@ -6,9 +6,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const page = () => {
-  const { isLoading, monthlyApplications } = useSelector(
-    (store: any) => store.allJobs
-  );
+  const { monthlyApplications } = useSelector((store: any) => store.allJobs);
   const dispatch = useDispatch();
 
   useEffect(() => {

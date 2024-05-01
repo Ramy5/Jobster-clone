@@ -1,15 +1,12 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import styled from "styled-components";
 import MainImg from "../assets/images/main.svg";
 import { Logo } from "@/components";
 
 const page = () => {
   return (
-    <Wrapper>
+    <main>
       <nav>
         <Logo />
       </nav>
@@ -35,53 +32,8 @@ const page = () => {
           alt="Job Hunt"
         />
       </div>
-    </Wrapper>
+    </main>
   );
 };
-
-// STYLE WITH STYLED COMPONENT
-const Wrapper = styled.main`
-  nav {
-    width: var(--fluid-width);
-    max-width: var(--max-width);
-    height: var(--nav-height);
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-  }
-
-  .page {
-    height: calc(100vh - var(--nav-height));
-    display: grid;
-    align-items: center;
-  }
-
-  h1 {
-    font-weight: 700;
-
-    span {
-      color: var(--primary-500);
-    }
-  }
-
-  p {
-    color: var(--grey-600);
-  }
-
-  .main-img {
-    display: none;
-  }
-
-  @media only screen and (min-width: 992px) {
-    .page {
-      grid-template-columns: 1fr 1fr;
-      column-gap: 3rem;
-    }
-
-    .main-img {
-      display: block;
-    }
-  }
-`;
 
 export default page;

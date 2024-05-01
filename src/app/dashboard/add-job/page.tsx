@@ -1,4 +1,5 @@
-// Import React and other required libraries
+"use client";
+
 import React, { useEffect } from "react";
 import Wrapper from "@/assets/wrappers/DashboardFormPage";
 import { BaseInput } from "@/components";
@@ -12,25 +13,7 @@ import {
 } from "@/features/job/jobSlice";
 import Select from "react-select";
 
-interface RootState {
-  job: {
-    isLoading: boolean;
-    position: string;
-    company: string;
-    jobLocation: string;
-    jobTypeOptions: any[];
-    jobType: any;
-    statusOptions: any[];
-    status: any;
-    isEditing: boolean;
-    editJobId: string;
-  };
-  user: {
-    location: string;
-  };
-}
-
-const page: React.FC<PageProps> = () => {
+const page = () => {
   const {
     isLoading,
     position,
@@ -42,13 +25,14 @@ const page: React.FC<PageProps> = () => {
     status,
     isEditing,
     editJobId,
-  } = useSelector((store: RootState) => store.job);
+  } = useSelector((store: any) => store.job);
   const dispatch = useDispatch();
-  const { user } = useSelector((store: RootState) => store.user);
+  const { user } = useSelector((store: any) => store.user);
 
   const handleChanges = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const name = e.target.name;
-    const value = e.target.value;
+    const name = e.target ? e.target.name : e.name;
+    const value = e.target ? e.target.value : e.value;
+
     dispatch(handleChange({ name, value }));
   };
 
@@ -56,7 +40,7 @@ const page: React.FC<PageProps> = () => {
     e.preventDefault();
 
     if (!position || !company || !jobLocation) {
-      toast.error("Please fill out all values!");
+      toast.error("please fill out all values!");
       return;
     }
 
@@ -94,14 +78,15 @@ const page: React.FC<PageProps> = () => {
           <BaseInput name="company" value={company} onChange={handleChanges} />
           <BaseInput
             name="jobLocation"
-            labelText="Job Location"
+            labelText="job location"
             value={jobLocation}
             onChange={handleChanges}
           />
           <div>
             <label className="form-label" htmlFor="jobType">
-              Job Type
+              jobType
             </label>
+
             <Select
               defaultValue={jobType}
               isClearable={true}
@@ -112,10 +97,12 @@ const page: React.FC<PageProps> = () => {
               onChange={handleChanges}
             />
           </div>
+
           <div>
             <label className="form-label" htmlFor="status">
-              Status
+              status
             </label>
+
             <Select
               defaultValue={status}
               isClearable={true}
@@ -126,20 +113,21 @@ const page: React.FC<PageProps> = () => {
               onChange={handleChanges}
             />
           </div>
+
           <div className="btn-container">
             <button
               className="btn btn-block clear-btn"
               type="button"
               onClick={() => dispatch(clearValues())}
             >
-              Clear
+              clear
             </button>
             <button
               className="btn btn-block submit-btn"
               type="submit"
               disabled={isLoading}
             >
-              {isEditing ? "Edit" : "Submit"}
+              {isEditing ? "edit" : "submit"}
             </button>
           </div>
         </div>

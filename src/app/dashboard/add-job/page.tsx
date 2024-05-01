@@ -30,10 +30,6 @@ interface RootState {
   };
 }
 
-// Define the type for the props (if any) passed to your component
-interface PageProps {}
-
-// Define the Page component
 const page: React.FC<PageProps> = () => {
   const {
     isLoading,
